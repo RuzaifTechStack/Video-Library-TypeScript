@@ -11,10 +11,12 @@ export function AdminHome(){
   
   const [Cookie, Setcookie, RemoveCookie] = useCookies(['admin']);
   const [Videos, SetVideos] = useState<VideoContract[]>([]);
-  const [EditVideos, SetEditVideos] = useState<VideoContract[]>([{VideoId:0, Title:'', Url:'',Description:'',Likes:0, Dislikes:0, Views:0, Comments:[], CategoryId:0}]);
+  const [EditVideos, SetEditVideos] = useState<VideoContract[]>([{VideoId:0, Title:'', Url:'',Description:'',Likes:0, Dislikes:0, Views:0, Comments:[], CategoryName:''}]);
   let navigate = useNavigate();
 
   const [GetCategory, SetCategory] = useState<any>([{CategoryId:0, CategoryName:''}]);
+
+  
 
    const [show, setShow] = useState(false);
    const [EditShow, SetEditShow] = useState(false);
@@ -52,6 +54,12 @@ export function AdminHome(){
     .then(response=>{
       SetVideos(response.data);
     });
+
+    axios.get(`http://127.0.0.1:2200/getcategories`)
+    .then(response=>{
+      SetCategory(response.data);
+    })
+
    },[]);
 
    const formik = useFormik({
@@ -64,7 +72,7 @@ export function AdminHome(){
       Dislikes:'',
       Views:'',
       Comments:'',
-      CategoryId:''
+      CategoryName:''
     },
     onSubmit: (Add)=>{
       axios.post(`http://127.0.0.1:2200/addvideo`, Add )
@@ -91,7 +99,7 @@ export function AdminHome(){
     Dislikes: EditVideos[0].Dislikes,
     Views:EditVideos[0].Views,
     Comments: EditVideos[0].Comments,
-    CategoryId: EditVideos[0].CategoryId
+    CategoryName: EditVideos[0].CategoryName
     },
     onSubmit:(Edit) =>{
       axios.put(`http://127.0.0.1:2200/updatevideo/${Edit.VideoId}`, Edit);
@@ -193,9 +201,16 @@ export function AdminHome(){
                           <dd>
                               <input type="text" name="Comments" onChange={formik.handleChange} className="form-control" />
                           </dd>
-                          <dt>Enter Category</dt>
+                          <dt>Select Category</dt>
                           <dd>
-                              <input type="text" name="CategoryId" onChange={formik.handleChange} className="form-control" />
+                           <select className="form-control" name="CategoryName" onChange={formik.handleChange}>
+                           {
+                              GetCategory.map((category: any)=>
+                                 <option  key={category.CategoryId}>{category.CategoryName}</option>
+                                )
+                            }
+                           </select>
+                              {/* <input type="text" name="CategoryId" onChange={formik.handleChange} className="form-control" /> */}
                           </dd>
                           
                       </dl>
@@ -274,9 +289,17 @@ export function AdminHome(){
                                 <dd>
                                     <input type="text" name="Views" value={Editformik.values.Views} onChange={Editformik.handleChange} className="form-control" />
                                 </dd>
-                                <dt>Category Id</dt>
+                                <dt>Select Category</dt>
                                 <dd>
-                                    <input type="text" name="CategoryId" value={Editformik.values.CategoryId} onChange={Editformik.handleChange} className="form-control" />
+                                <select className="form-control" value={Editformik.values.CategoryName} name="CategoryName" onChange={Editformik.handleChange}>
+                                      {
+                                          GetCategory.map((category: any)=>
+                                            <option key={category.CategoryId}>{category.CategoryName}</option>
+                                            )
+                                       }
+                                 </select>
+                                  
+                                    {/* <input type="text" name="CategoryId" value={Editformik.values.CategoryId} onChange={Editformik.handleChange} className="form-control" /> */}
                                 </dd>
                                </dl>
                                <button type="submit" className="btn btn-warning w-100">Save</button>

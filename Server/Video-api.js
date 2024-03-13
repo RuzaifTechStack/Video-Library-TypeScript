@@ -114,7 +114,7 @@ app.post("/addvideo", (request, response)=>{
         "Dislikes": parseInt(request.body.Dislikes),
         "Views": parseInt(request.body.Views),
         "Comments": [request.body.Comments],
-        "CategoryId":parseInt(request.body.CategoryId)
+        "CategoryName": request.body.CategoryName
     }
     mongoClient.connect(ConStr)
     .then(clientObject=>{
@@ -141,7 +141,7 @@ app.put("/updatevideo/:id", (request, response)=>{
          Description: request.body.Description,
          Views: parseInt(request.body.Views),
          Comments: [request.body.Comments],
-         CategoryId: parseInt(request.body.CategoryId)
+         CategoryName: request.body.CategoryName
         }
         })
         .then(()=>{

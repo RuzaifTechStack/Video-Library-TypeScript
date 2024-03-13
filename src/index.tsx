@@ -8,7 +8,7 @@ import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
 import * as bootstrap from 'bootstrap';
 import { CookiesProvider } from 'react-cookie';
 import Store from './Store/Store';
-// import { Provider } from 'react-redux';
+import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,9 +16,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <CookiesProvider>
-     {/* <Provider store={Store}> */}
+     <Provider store={Store}>
        <App />
-     {/* </Provider> */}
+     </Provider>
     </CookiesProvider>
   </React.StrictMode>
 );

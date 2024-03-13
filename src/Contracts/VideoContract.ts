@@ -9,5 +9,5 @@ export interface VideoContract
     Dislikes:number;
     Views:number
     Comments:string[];
-    CategoryId:number;
+    CategoryName:string;
 }
